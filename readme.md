@@ -19,7 +19,7 @@ This is a Node.js API for displaying product information. Currently, it focuses 
 
 ### Installation
 
-1.  Bashgit clone https://github.com/your-username/product-api.git Use code [with caution.](/faq#coding)content\_copy
+1.  Bashgit clone https://github.com/PerezChris99/NodeJs-REST-API Use code [with caution.](/faq#coding)content\_copy
     
 2.  Bashcd product-apinpm install Use code [with caution.](/faq#coding)content\_copy
     
@@ -44,7 +44,7 @@ This is a Node.js API for displaying product information. Currently, it focuses 
     
     *   Set the request method to GET.
         
-    *   Set the URL to http://localhost:3000/products.
+    *   Set the URL to http://localhost:5000/products.
         
     *   Send the request. The response will be a JSON array containing all products.
         
