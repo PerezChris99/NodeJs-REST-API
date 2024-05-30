@@ -1,7 +1,7 @@
 Node.js Product API - Readme
 ----------------------------
 
-This is a Node.js API for displaying product information. Currently, it focuses on phone products, but it can be easily extended to handle other categories.
+This is a Node.js API for displaying product information. Currently, it focuses on various electric gadgets, but it can be easily extended to handle other categories.
 
 ### Features
 
