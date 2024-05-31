@@ -14,7 +14,7 @@ This is a Node.js API for displaying product information. Currently, it focuses 
 
 *   Node.js: JavaScript runtime environment used to build the API.
     
-*   Express.js: Web framework for building APIs in Node.js.
+*   Express.js: This will be utilized in the next project.
     
 
 ### Installation
@@ -52,7 +52,7 @@ This is a Node.js API for displaying product information. Currently, it focuses 
     
     *   Set the request method to GET.
         
-    *   Set the URL to http://localhost:3000/products/1 (replace 1 with the actual product ID).
+    *   Set the URL to http://localhost:5000/products/1 (replace 1 with the actual product ID).
         
     *   Send the request. The response will be a JSON object containing details of the specified product.
         
