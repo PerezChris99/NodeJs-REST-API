@@ -64,7 +64,7 @@ async function updateProduct(req, res, id){
             res.writeHead(404, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ message: 'Product Not Found'}))
         } else {
-            
+
             const body = await getPostData(req)
 
             const { title, description, price } = JSON.parse(body)
@@ -87,9 +87,28 @@ async function updateProduct(req, res, id){
     }
 }
 
+async function deleteProduct(req, res, id){
+    try{
+        const product = await Product.findById(id)
+
+        if(!product){  
+            res.writeHead(404, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: 'Product Not Found' }))
+        } else {
+            await Product.remove(id)
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ message: `Product ${id} removed`}))
+        }
+    } catch(error){
+        console.log(error)
+    }
+}
+
+
 module.exports = {
     getProduct,
     getProducts,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
