@@ -9,27 +9,31 @@ A lightweight RESTful API built with vanilla Node.js for managing product inform
 - **Create Product** - Add new products to the database
 - **Update Product** - Modify existing product information
 - **Delete Product** - Remove products from the database
+- **Rate Limiting** - Protection against excessive requests with Redis primary and in-memory failover
 
 ## Technologies
 
 - **Node.js** - JavaScript runtime environment (no Express.js - pure Node.js HTTP module)
 - **UUID** - For generating unique product identifiers
 - **JSON File Storage** - Simple file-based data persistence
+- **Redis** (optional) - Primary rate limiting store with automatic in-memory failover
 
 ## Project Structure
 
 ```
 NodeJs-REST-API/
-├── server.js              # Main entry point - HTTP server and routing
+├── server.js                  # Main entry point - HTTP server and routing
 ├── controllers/
 │   └── productController.js   # Request handlers for product operations
 ├── models/
 │   └── productModel.js        # Data access layer for products
+├── middleware/
+│   └── rateLimiter.js         # Rate limiting middleware (Redis + in-memory failover)
 ├── data/
 │   └── products.json          # JSON file storing product data
-├── utils.js               # Utility functions (file writing, request parsing)
-├── package.json           # Project dependencies and scripts
-└── readme.md              # Documentation
+├── utils.js                   # Utility functions (file writing, request parsing)
+├── package.json               # Project dependencies and scripts
+└── readme.md                  # Documentation
 ```
 
 ## Installation
@@ -123,6 +127,50 @@ curl -X DELETE http://localhost:5000/api/products/1
 {
   "message": "Product Not Found"
 }
+```
+
+### Rate Limit Exceeded Response (429)
+```json
+{
+  "message": "Too many requests, please try again later.",
+  "retryAfter": 450
+}
+```
+
+## Rate Limiting
+
+The API includes built-in rate limiting to protect against abuse and ensure fair usage.
+
+### Configuration
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Window | 15 minutes | Time window for rate limit tracking |
+| Max Requests | 100 | Maximum requests per window per IP |
+
+### Response Headers
+
+Every response includes rate limit information:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Maximum requests allowed per window |
+| `X-RateLimit-Remaining` | Remaining requests in current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+### Storage Strategy
+
+- **Primary**: Redis (if configured) - recommended for production/distributed environments
+- **Failover**: In-memory store - automatic fallback if Redis is unavailable
+
+To enable Redis, pass a Redis client to the rate limiter:
+
+```javascript
+const { setRedisClient } = require('./middleware/rateLimiter')
+const redis = require('redis')
+
+const client = redis.createClient()
+setRedisClient(client)
 ```
 
 ## Product Schema

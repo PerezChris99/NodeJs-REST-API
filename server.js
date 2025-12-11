@@ -1,7 +1,12 @@
 const http = require('http')
 const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('./controllers/productController')
+const { rateLimiter } = require('./middleware/rateLimiter')
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
+    // Apply rate limiting to all requests
+    const allowed = await rateLimiter(req, res)
+    if (!allowed) return
+
     if(req.url === '/api/products' && req.method === 'GET'){
         getProducts(req, res)
 
