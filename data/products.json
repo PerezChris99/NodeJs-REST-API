@@ -1,1 +1,32 @@
-[{"id":"1","name":"Airpods Wireless Bluetooth Headphones","description":"Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working","price":89.99},{"id":"2","name":"iPhone 11 Pro 256GB Memory","description":"Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life","price":599.99},{"id":"3","name":"Cannon EOS 80D DSLR Camera","description":"Characterized by versatile imaging specs, the Canon EOS 80D further clarifies itself using a pair of robust focusing systems and an intuitive design","price":929.99},{"id":"4","name":"Sony Playstation 4 Pro White Version","description":"The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, music","price":399.99},{"id":"5","name":"Logitech G-Series Gaming Mouse","description":"Get a better handle on your games with this Logitech LIGHTSYNC gaming mouse. The six programmable buttons allow customization for a smooth playing experience","price":49.99},{"id":"f1beb43c-ea45-4837-936b-a9732915d3ec","title":"Test Product","description":"This is my product","price":100},{"id":"e71560e8-6ae9-415d-bf7f-9a1d25bf37cb","title":"Test Product","description":"This is my product","price":100},{"id":"d2d704f5-6414-435b-ad16-f445e9038d67","title":"Test Product","description":"This is my product","price":100},{"id":"e9d8f01c-da83-43d1-a696-7eebdc42c047","title":"Test Product","description":"This is my product","price":100},{"id":"b4f3e24d-3f25-4b12-b08b-3390a8da145e","title":"Ryans Product","description":"Might be an illegal substance","price":5000}]
+[
+  {
+    "id": "1",
+    "title": "Airpods Wireless Bluetooth Headphones",
+    "description": "Bluetooth technology lets you connect it with compatible devices wirelessly. High-quality AAC audio offers immersive listening experience. Built-in microphone allows you to take calls while working.",
+    "price": 89.99
+  },
+  {
+    "id": "2",
+    "title": "iPhone 11 Pro 256GB Memory",
+    "description": "Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life.",
+    "price": 599.99
+  },
+  {
+    "id": "3",
+    "title": "Cannon EOS 80D DSLR Camera",
+    "description": "Characterized by versatile imaging specs, the Canon EOS 80D further clarifies itself using a pair of robust focusing systems and an intuitive design.",
+    "price": 929.99
+  },
+  {
+    "id": "4",
+    "title": "Sony Playstation 4 Pro White Version",
+    "description": "The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, or music.",
+    "price": 399.99
+  },
+  {
+    "id": "5",
+    "title": "Logitech G-Series Gaming Mouse",
+    "description": "Get a better handle on your games with this Logitech LIGHTSYNC gaming mouse. The six programmable buttons allow customization for a smooth playing experience.",
+    "price": 49.99
+  }
+]

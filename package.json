@@ -1,16 +1,25 @@
 {
   "name": "nodejs-rest-api",
   "version": "1.0.0",
+  "description": "A lightweight RESTful API built with vanilla Node.js for managing products with full CRUD operations",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "nodejs",
+    "rest-api",
+    "crud",
+    "products"
+  ],
+  "author": "PerezChris99",
   "license": "ISC",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PerezChris99/NodeJs-REST-API.git"
+  },
   "devDependencies": {
     "nodemon": "^3.1.2"
   },
