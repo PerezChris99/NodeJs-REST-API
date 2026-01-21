@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products API Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-gradient">
+        <div class="header-content">
+            <h1><i class="bi bi-box-seam"></i> Products API</h1>
+            <p>Enterprise Grade REST API Dashboard</p>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-primary-gradient">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="productCount">-</h3>
+                    <span>Total Products</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-success-gradient">
+                    <i class="bi bi-heart-pulse"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="healthStatus">-</h3>
+                    <span>API Status</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-warning-gradient">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="rateLimit">-</h3>
+                    <span>Rate Limit</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-info-gradient">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="uptime">-</h3>
+                    <span>Uptime</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="content-grid main-layout">
+            <!-- Left Column: Products -->
+            <div class="products-section">
+                <article class="card products-panel">
+                    <header class="card-header">
+                        <h2><i class="bi bi-grid"></i> Products</h2>
+                    </header>
+                    
+                    <div class="search-bar">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search products...">
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsList">
+                                <tr>
+                                    <td colspan="3" class="loading-cell">
+                                        <div class="spinner-border text-primary" role="status"></div>
+                                        <p>Loading products...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <footer class="pagination-bar">
+                        <button class="btn btn-outline-secondary btn-sm" id="prevBtn" disabled>
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <span id="pageInfo">Page 1</span>
+                        <button class="btn btn-outline-secondary btn-sm" id="nextBtn">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </footer>
+                </article>
+            </div>
+
+            <!-- Right Column: Analytics & Forms -->
+            <div class="analytics-section">
+                <!-- Product Form Card -->
+                <article class="card form-card mb-4" id="productFormCard">
+                    <header class="card-header bg-gradient-primary text-white">
+                        <h2 class="text-primary"><i class="bi bi-plus-circle"></i> <span id="formTitle">Add New Product</span></h2>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="resetForm()" id="cancelEditBtn" style="display: none;">
+                            Cancel
+                        </button>
+                    </header>
+                    <div class="card-body">
+                        <form id="productForm">
+                            <input type="hidden" id="productId">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="title" placeholder="Product name" required minlength="3">
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="2" placeholder="Product details" required minlength="10"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" placeholder="0.00" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-primary" onclick="saveProduct()">
+                                    <i class="bi bi-save"></i> Save Product
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </article>
+
+                <!-- Charts Row -->
+                <div class="analytics-grid">
+
+                    <!-- Traffic Chart -->
+                    <article class="card chart-card">
+                        <header class="card-header">
+                            <h2><i class="bi bi-graph-up-arrow"></i> Traffic Overview</h2>
+                            <div class="health-status">
+                                <span class="health-dot" id="healthDot"></span>
+                                <span id="healthText">Checking...</span>
+                            </div>
+                        </header>
+                        <div class="card-body">
+                            <canvas id="trafficChart"></canvas>
+                        </div>
+                    </article>
+
+                    <!-- Response Time Chart -->
+                    <article class="card chart-card">
+                        <header class="card-header">
+                            <h2><i class="bi bi-speedometer2"></i> Response Time</h2>
+                        </header>
+                        <div class="card-body">
+                            <canvas id="responseChart"></canvas>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Footer Info Row -->
+                <div class="info-grid">
+                     <!-- System Health Details -->
+                     <article class="card health-card">
+                        <header class="card-header">
+                            <h2><i class="bi bi-activity"></i> System Metrics</h2>
+                        </header>
+                        <div class="card-body" id="healthDetails">
+                            <div class="loading-cell">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                <p>Loading health info...</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- API Endpoints -->
+                    <article class="card endpoints-card">
+                        <header class="card-header">
+                            <h2><i class="bi bi-code-slash"></i> API Reference</h2>
+                        </header>
+                        <div class="card-body">
+                            <p class="base-url">
+                                Base: <code id="baseUrl">http://localhost:5000</code>
+                            </p>
+                            <ul class="endpoints-list">
+                                <li>
+                                    <span class="method get">GET</span>
+                                    <code>/api/products</code>
+                                </li>
+                                <li>
+                                    <span class="method post">POST</span>
+                                    <code>/api/products</code>
+                                </li>
+                                <li>
+                                    <span class="method put">PUT</span>
+                                    <code>/api/products/:id</code>
+                                </li>
+                                <li>
+                                    <span class="method delete">DELETE</span>
+                                    <code>/api/products/:id</code>
+                                </li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/app.js"></script>
+</body>
+</html>

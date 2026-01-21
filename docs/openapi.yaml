@@ -1,0 +1,324 @@
+openapi: 3.0.3
+info:
+  title: Products REST API
+  description: |
+    A production-ready RESTful API built with vanilla Node.js for managing products.
+
+    ## Features
+    - Full CRUD operations
+    - Pagination & Search
+    - Input validation
+    - Rate limiting
+    - Health checks
+  version: 2.0.0
+  contact:
+    name: API Support
+    url: https://github.com/PerezChris99/NodeJs-REST-API
+  license:
+    name: ISC
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+
+tags:
+  - name: Products
+    description: Product management endpoints
+  - name: Health
+    description: Health check endpoints
+
+paths:
+  /api/products:
+    get:
+      tags: [Products]
+      summary: List all products
+      description: Returns a paginated list of products with optional search and sorting
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Items per page
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search in title and description
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [title, price, createdAt]
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+          description: Sort direction
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+
+    post:
+      tags: [Products]
+      summary: Create a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Product ID
+
+    get:
+      tags: [Products]
+      summary: Get a product by ID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      tags: [Products]
+      summary: Update a product (full)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Product updated
+        "404":
+          description: Product not found
+
+    patch:
+      tags: [Products]
+      summary: Update a product (partial)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductPatch"
+      responses:
+        "200":
+          description: Product updated
+        "404":
+          description: Product not found
+
+    delete:
+      tags: [Products]
+      summary: Delete a product
+      responses:
+        "204":
+          description: Product deleted
+        "404":
+          description: Product not found
+
+  /health:
+    get:
+      tags: [Health]
+      summary: Basic health check
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Readiness check
+      responses:
+        "200":
+          description: Service is ready
+        "503":
+          description: Service not ready
+
+  /health/live:
+    get:
+      tags: [Health]
+      summary: Liveness check
+      responses:
+        "200":
+          description: Service is alive
+
+  /health/detailed:
+    get:
+      tags: [Health]
+      summary: Detailed health information
+      responses:
+        "200":
+          description: Detailed health info
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProductInput:
+      type: object
+      required: [title, description, price]
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 200
+        description:
+          type: string
+          minLength: 10
+          maxLength: 2000
+        price:
+          type: number
+          minimum: 0
+          maximum: 999999.99
+
+    ProductPatch:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 200
+        description:
+          type: string
+          minLength: 10
+          maxLength: 2000
+        price:
+          type: number
+          minimum: 0
+          maximum: 999999.99
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+
+    PaginationMeta:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            totalPages:
+              type: integer
+            hasNext:
+              type: boolean
+            hasPrev:
+              type: boolean
+
+  securitySchemes:
+    RateLimitHeaders:
+      type: apiKey
+      in: header
+      name: X-RateLimit-Remaining
+      description: Rate limit headers are returned with every response
